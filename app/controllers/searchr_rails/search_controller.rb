@@ -3,7 +3,14 @@ require_dependency "searchr_rails/application_controller"
 module SearchrRails
   class SearchController < ApplicationController
     def self.search_query_class
-      EnronQuery
+      unless @search_klass
+        raise 'You must call SearchrRails::SearchController.search_query_class = AQueryClass (should be a subclass of Searchr::SolrQuery'
+      end
+      @search_klass
+    end
+
+    def self.search_query_class=(klass)
+      @search_klass = klass
     end
 
     def index
