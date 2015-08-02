@@ -17,7 +17,7 @@ module SearchrRails
       result = self.class.search_query_class.new.search
 
       respond_to do |format|
-        format.html { render locals: { result: result }}
+        format.html { render locals: { result: result, show_fields: [:id, :from, :to, :subject, :date] }}
         # format.json {
         #   data = {explain_rows: @solr.explain_rows, response: @solr.body, explain: @solr.explain}
         #   render json: data, status: solr.status
