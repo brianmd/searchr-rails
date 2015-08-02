@@ -1,3 +1,5 @@
-= SearchrRails
+Display document weights to show why one document is higher rated than another.
 
-This project rocks and uses MIT-LICENSE.
+An example screenshot:
+
+![screenshot](http://murphydye.com/searchr_rails.jpg)

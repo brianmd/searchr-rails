@@ -1,0 +1,40 @@
+/%b
+/  = explanation[0][0]
+/%br
+/%br
+- if doc['id'].start_with? 'Product '
+  %label Product:
+  = link_to product_path(Product(doc['id'].split(' ').last)), target: '_' do
+    = doc['name_texts']
+- else
+  = doc['id']
+%b
+  %table.explanation.blue_background.dropshadow
+    %tr
+      - n = -1
+      - explanation[0][2].each do |term|
+        - n = n + 1 if term=='('
+        %td{style: "padding-top: #{n*50}px"}
+          - if term.class==Array
+            = term[0]
+            %br
+            = term[1]
+          - else
+            = term
+        - n = n - 1 if term==')'
+
+- show_fields.each do |id|
+  %label
+    = "#{id.capitalize}: "
+  = doc[id.to_s]
+  %br
+
+- if false
+  %br
+  = result.explanations[doc['id']][0][2]
+  %br
+  %br
+  = result.explanations[doc['id']][0][0]
+  %br
+  %br
+  = result.explanations[doc['id']][0][1]

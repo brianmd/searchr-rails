@@ -14,15 +14,26 @@ module SearchrRails
     end
 
     def index
-      result = self.class.search_query_class.new.search
+      query = self.class.search_query_class.new
+      query.query = params[:query] if params[:query]
+      ignore_errors{ query.start_row = Integer(params[:start_row]) if params[:start_row] }
+      ignore_errors{ query.num_rows = Integer(params[:num_rows]) if params[:num_rows] }
+      query.fields_to_query = params[:query_fields] if params[:query_fields]
+      query.fields_to_return = params[:fields_to_return] if params[:fields_to_return]
+      result = query.search
+      data = { result: result, show_fields: query.fields_to_return, params: params }
 
       respond_to do |format|
-        format.html { render locals: { result: result, show_fields: [:id, :from, :to, :subject, :date] }}
-        # format.json {
-        #   data = {explain_rows: @solr.explain_rows, response: @solr.body, explain: @solr.explain}
-        #   render json: data, status: solr.status
-        # }
+        format.html { render locals: data }
+        format.json {
+          render json: data, status: solr.status
+        }
       end
+    end
+
+    def ignore_errors
+      yield
+    rescue
     end
   end
 end

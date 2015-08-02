@@ -1,23 +1,29 @@
 :css
-  body {background-color: white; background-image: none; margin: 15px 0px 0px 15px}
-  h1 {text-align: center; font-size: 200%}
+  body {background-color: white; background-image: none; margin: 15px 0px 0px 15px;}
+  h1 {text-align: center; font-size: 200%; margin: 0px;}
   ul {list-style: none;}
   label {font-weight: bold;}
-  textarea,input {width: 300px}
+  textarea,input { width: 300px;}
   table {border-spacing: 0.5rem;}
-  td {text-align: center}
-  label {font-weight: bold; display: inline}
-  a:hover, a:visited, a:link, a:active { text-decoration: none; color: blue }
+  td {text-align: center;}
+  label {font-weight: bold; display: inline;}
+  a:hover, a:visited, a:link, a:active {text-decoration: none; color: blue;}
+  textarea {width: 120px}
 
-  input[type=submit] {text-align: center; font-size: 2em; font-family: verdana; background-color: #000033; color: #639DBC; padding: 5px;}
+  input[type=submit] {text-align: center; font-size: 2em; font-family: verdana; background-color: green;
+        color: white; padding: 5px; margin-left:auto; margin-right:auto;
+        -webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
+        -moz-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75); box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);}
 
-  .search_params td {text-align: center; padding: 15px; vertical-align: top}
-
+  .search_params td {text-align: left; padding: 0px 15px; vertical-align: top}
   table.explanation, table.search_params {margin-bottom: 15px;}
 
   .blue_background {background-color: #639DBC;}
   .blue_background_font {color: white;}
-  .dropshadow {-webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75); -moz-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75); box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);}
+  .dropshadow {-webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
+          -moz-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75); box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);}
+  .center {margin-left: auto; margin-right: auto;}
+
 
   .explanation td {text-align: center; padding: 0px 0px 3px 6px;}
 
@@ -33,53 +39,21 @@ from Solr
 %b
   = "Found #{result.num_matches} items (showing rows #{result.start_row}-#{result.end_row})"
 %br
-/%a{href: @search_url, title: 'Search Url', target: '_'}
-/  Open search in New Window
-
+%b
+  Form params:
+= params
+%br
+%hr
+%table.blue_background.dropshadow.center
+  %tr
+    %td
+      = render partial: 'parameters_form', locals: { query: result.query }
+%br
 %hr
 %ul
   - result.documents.each do |doc|
     %li
-      %b
-        = result.explanations[doc['id']][0][0]
-      %br
-      %br
-      %label Product:
-      - if doc['id'].start_with? 'Product '
-        = link_to product_path(Product(doc['id'].split(' ').last)), target: '_' do
-          = doc['name_texts']
-      - else
-        = doc['id']
-      %b
-        %table.explanation.blue_background.dropshadow
-          %tr
-            - n = -1
-            - result.explanations[doc['id']][0][2].each do |term|
-              - n = n + 1 if term=='('
-              %td{style: "padding-top: #{n*50}px"}
-                - if term.class==Array
-                  = term[0]
-                  %br
-                  = term[1]
-                - else
-                  = term
-              - n = n - 1 if term==')'
-
-      - show_fields.each do |id|
-        %label
-          = "#{id.capitalize}: "
-        = doc[id.to_s]
-        %br
-
-      - if false
-        %br
-        = result.explanations[doc['id']][0][2]
-        %br
-        %br
-        = result.explanations[doc['id']][0][0]
-        %br
-        %br
-        = result.explanations[doc['id']][0][1]
+      = render partial: 'document', locals: { doc: doc, explanation: result.explanations[doc['id']], show_fields: result.query.fields_to_return }
       %hr
 /%br
 /%br

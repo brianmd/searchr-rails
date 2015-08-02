@@ -1,0 +1,43 @@
+= form_tag 'search', method: 'GET' do
+  %table.search_params{ align: 'center' }
+    %tr
+      %td{colspan: 3, style: "padding: 0px"}
+        %h1.title
+          = query.class.to_s.titleize
+    %tr
+      %td{colspan: 3}
+        %label Query:
+        = text_field_tag 'query', query.query, size: 60
+
+    %tr
+      %td
+        /%label Boost Fields:
+        /= text_area_tag 'boost_fields', query.boost_fields, rows: 3, cols: 40
+        /%br
+        %label Start Row:
+        = text_field_tag 'start_row', query.start_row, size: 5, style: 'width: 25px'
+      %td
+        %label Show # Rows:
+        = text_field_tag 'num_rows', query.num_rows, size: 5, style: 'width: 25px'
+      %td
+        != '&nbsp;'
+
+    %tr
+      %td{colspan: 3}
+        != '&nbsp;'
+
+    %tr
+      %td
+        %label{ style: 'text-align: left' } Query Fields:
+        %br
+        = text_area_tag 'query_fields', query.fields_to_query, rows: 12, cols: 30
+      %td
+        %label{ style: 'text-align: left' } Show Fields in Result:
+        %br
+        = text_area_tag 'fields_to_return', query.fields_to_return.join("\n"), rows: 12, cols: 30
+      %td
+        != '&nbsp;'
+
+    %tr
+      %td{colspan: 3, style: 'text-align: center'}
+        = submit_tag 'Search'
