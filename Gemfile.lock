@@ -4,13 +4,13 @@ PATH
     searchr_rails (0.0.1)
       haml
       rails (~> 4.2.3)
-      searchr
 
 PATH
   remote: ../searchr
   specs:
-    searchr (0.1.0)
+    searchr (0.1.1)
       addressable
+      requirer
 
 GEM
   remote: https://rubygems.org/
@@ -97,6 +97,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
+    requirer (0.0.5)
     sprockets (3.2.0)
       rack (~> 1.0)
     sprockets-rails (2.3.2)
